@@ -11,10 +11,11 @@ workflows:
       - name: Build Web Assets
         script: |
           npx vite build || npm run build --if-present
+          mkdir -p dist
       - name: Add Android Platform & Sync
         script: |
-          npx cap init "HESABI" "com.hesabi.app" --web-dir dist || true
-          npx cap add android || true
+          npx cap init "HESABI" "com.hesabi.app" --web-dir dist
+          npx cap add android
           npx cap sync android
       - name: Build Android APK
         script: |
