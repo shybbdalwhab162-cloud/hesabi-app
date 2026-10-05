@@ -7,12 +7,13 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
+          npm install -g @capacitor/cli @capacitor/core
       - name: Build Web Assets
         script: |
           npx vite build || npm run build --if-present
       - name: Sync Capacitor
         script: |
-          npx cap sync android
+          npx cap sync android || npx @capacitor/cli sync android
       - name: Build Android APK
         script: |
           cd android
