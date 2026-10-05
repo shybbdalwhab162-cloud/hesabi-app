@@ -7,17 +7,19 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
-          npm install @capacitor/android @capacitor/cli @capacitor/core
+          npm install @capacitor/core @capacitor/cli @capacitor/android
       - name: Build Web Assets
         script: |
           npx vite build || npm run build --if-present
       - name: Add Android Platform & Sync
         script: |
+          npx cap init "HESABI" "com.hesabi.app" --web-dir dist || true
           npx cap add android || true
           npx cap sync android
       - name: Build Android APK
         script: |
           cd android
+          chmod +x gradlew
           ./gradlew assembleDebug
     artifacts:
       - android/app/build/outputs/apk/**/*.apk
