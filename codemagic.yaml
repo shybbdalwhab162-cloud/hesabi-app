@@ -6,9 +6,11 @@ workflows:
     environment:
       node: 20
     scripts:
-      - name: Install Dependencies
+      - name: Prepare Root Configuration
         script: |
-          npm install --legacy-peer-deps
+          if [ ! -f package.json ]; then
+            npm init -y
+          fi
           npm install @capacitor/core @capacitor/cli @capacitor/android --save
       - name: Build Web Assets
         script: |
@@ -16,6 +18,9 @@ workflows:
           npx vite build || echo "Build fallback"
       - name: Setup Capacitor Android
         script: |
+          if [ ! -f capacitor.config.json ]; then
+            npx cap init "HESABI" "com.hesabi.app" --web-dir "dist"
+          fi
           npx cap add android || true
           npx cap sync android
       - name: Build Debug APK
