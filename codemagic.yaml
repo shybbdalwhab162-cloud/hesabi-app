@@ -7,18 +7,15 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm install @capacitor/core @capacitor/cli @capacitor/android --save-dev
       - name: Build Web Assets
         script: |
           npx vite build || npm run build --if-present
           mkdir -p dist
-      - name: Add Android Platform & Sync
+      - name: Setup Capacitor & Add Android
         script: |
-          if [ ! -f capacitor.config.json ] && [ ! -f capacitor.config.ts ]; then
-            npx cap init "HESABI" "com.hesabi.app" --web-dir dist
-          fi
-          npx cap add android || true
-          npx cap copy android
+          npx cap init "HESABI" "com.hesabi.app" --web-dir dist || true
+          npx cap add android
           npx cap sync android
       - name: Build Android APK
         script: |
