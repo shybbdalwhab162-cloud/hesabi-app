@@ -31,6 +31,6 @@ workflows:
         script: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug -Xlint:none
+          ./gradlew assembleDebug --no-daemon
     artifacts:
       - android/app/build/outputs/apk/**/*.apk
