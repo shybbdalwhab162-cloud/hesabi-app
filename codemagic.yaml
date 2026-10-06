@@ -22,15 +22,16 @@ workflows:
           fi
       - name: Setup Capacitor Android
         script: |
+          rm -rf android
           if [ ! -f capacitor.config.json ]; then
             npx cap init "HESABI" "com.hesabi.app" --web-dir "dist"
           fi
-          npx cap add android || true
+          npx cap add android
           npx cap sync android
       - name: Build Debug APK
         script: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug --stacktrace
     artifacts:
       - android/app/build/outputs/apk/**/*.apk
