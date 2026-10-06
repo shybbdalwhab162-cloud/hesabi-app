@@ -1,0 +1,6 @@
+{
+  "appId": "com.hesabi.app",
+  "appName": "HESABI",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
