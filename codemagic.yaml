@@ -1,25 +1,24 @@
-workflows:
-  android-workflow:
-    name: Android Build
-    max_build_duration: 60
-    instance_type: mac_mini_m1
-    scripts:
-      - name: Install dependencies
-        script: |
-          npm install
-          npm install @capacitor/core @capacitor/cli @capacitor/android --save
-      - name: Build Web Assets
-        script: |
-          npx vite build || npm run build --if-present
-          mkdir -p dist
-      - name: Add Android Platform & Sync
-        script: |
-          npx cap add android || true
-          npx cap sync android
-      - name: Build Android APK
-        script: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug
-    artifacts:
-      - android/app/build/outputs/apk/**/*.apk
+{
+  "name": "hesabi-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "lucide-react": "^0.344.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.2"
+  }
+}
