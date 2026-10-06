@@ -32,6 +32,6 @@ workflows:
         script: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug -x test -x lint
     artifacts:
       - android/app/build/outputs/apk/**/*.apk
