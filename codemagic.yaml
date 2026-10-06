@@ -5,6 +5,7 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       node: 20
+      java: 17
     scripts:
       - name: Prepare Root Configuration
         script: |
@@ -30,6 +31,6 @@ workflows:
         script: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug -Xlint:none
     artifacts:
       - android/app/build/outputs/apk/**/*.apk
