@@ -9,15 +9,15 @@ workflows:
       - name: Install Dependencies
         script: |
           npm install --legacy-peer-deps
-          npm install -g @capacitor/cli
+          npm install @capacitor/core @capacitor/cli @capacitor/android --save
       - name: Build Web Assets
         script: |
           mkdir -p dist
           npx vite build || echo "Build fallback"
       - name: Setup Capacitor Android
         script: |
-          cap add android || true
-          cap sync android
+          npx cap add android || true
+          npx cap sync android
       - name: Build Debug APK
         script: |
           cd android
