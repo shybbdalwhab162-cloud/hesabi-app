@@ -30,8 +30,10 @@ workflows:
           npx cap sync android
       - name: Build Debug APK
         script: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx2048m" -x test -x lint
+          ./gradlew assembleDebug --stacktrace --no-daemon -x test -x lint
     artifacts:
       - android/app/build/outputs/apk/**/*.apk
+      - android/app/build/outputs/apk/debug/*.apk
