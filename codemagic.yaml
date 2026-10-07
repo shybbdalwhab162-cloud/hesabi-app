@@ -7,23 +7,29 @@ workflows:
       node: 20
       java: 17
     scripts:
-      - name: Install Dependencies and Build Web
+      - name: Build Android APK Complete Process
         script: |
+          # 1. Ensure package.json exists and install dependencies
+          if [ ! -f package.json ]; then
+            npm init -y
+          fi
           npm install
           npm install @capacitor/core @capacitor/cli @capacitor/android --save
+
+          # 2. Build Web Assets
+          mkdir -p dist
           npx vite build || true
-          if [ ! -d dist ]; then mkdir dist; fi
           if [ ! -f dist/index.html ]; then
             echo '<!DOCTYPE html><html><head><title>HESABI</title></head><body><div id="root"></div></body></html>' > dist/index.html
           fi
-      - name: Setup Android Platform
-        script: |
+
+          # 3. Setup Capacitor Android Platform
           rm -rf android
           npx cap init "HESABI" "com.hesabi.app" --web-dir "dist" || true
           npx cap add android
           npx cap sync android
-      - name: Build Debug APK via Capacitor
-        script: |
+
+          # 4. Build Debug APK via Gradle
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon -x test -x lint
