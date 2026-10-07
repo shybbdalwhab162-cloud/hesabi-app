@@ -6,7 +6,6 @@ workflows:
     environment:
       node: 20
       java: 17
-      android_sdk: 34
     scripts:
       - name: Prepare Root Configuration
         script: |
@@ -31,9 +30,8 @@ workflows:
           npx cap sync android
       - name: Build Debug APK
         script: |
-          export ANDROID_HOME=$HOME/Library/Android/sdk
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon -x test -x lint
+          ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx2048m" -x test -x lint
     artifacts:
       - android/app/build/outputs/apk/**/*.apk
