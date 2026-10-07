@@ -30,10 +30,9 @@ workflows:
           npx cap sync android
       - name: Build Debug APK
         script: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon -x test -x lint
+          echo "org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m" >> gradle.properties
+          ./gradlew assembleDebug --no-daemon -x test -x lint
     artifacts:
       - android/app/build/outputs/apk/**/*.apk
-      - android/app/build/outputs/apk/debug/*.apk
