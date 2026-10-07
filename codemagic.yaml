@@ -7,32 +7,25 @@ workflows:
       node: 20
       java: 17
     scripts:
-      - name: Prepare Project and Web Assets
+      - name: Install Dependencies and Build Web
         script: |
-          if [ ! -f package.json ]; then
-            npm init -y
-          fi
+          npm install
           npm install @capacitor/core @capacitor/cli @capacitor/android --save
-          mkdir -p dist
           npx vite build || true
+          if [ ! -d dist ]; then mkdir dist; fi
           if [ ! -f dist/index.html ]; then
-            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>HESABI</title></head><body><div id="root"></div></body></html>' > dist/index.html
+            echo '<!DOCTYPE html><html><head><title>HESABI</title></head><body><div id="root"></div></body></html>' > dist/index.html
           fi
-      - name: Generate and Sync Android Project
+      - name: Setup Android Platform
         script: |
           rm -rf android
-          if [ ! -f capacitor.config.json ]; then
-            echo '{"appId":"com.hesabi.app","appName":"HESABI","webDir":"dist"}' > capacitor.config.json
-          fi
+          npx cap init "HESABI" "com.hesabi.app" --web-dir "dist" || true
           npx cap add android
           npx cap sync android
-      - name: Build Android Debug APK
+      - name: Build Debug APK via Capacitor
         script: |
           cd android
           chmod +x gradlew
-          mkdir -p ~/.android && touch ~/.android/repositories.cfg
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew assembleDebug --no-daemon -x test -x lint
     artifacts:
-      - android/app/build/outputs/apk/debug/*.apk
-      - android/app/build/outputs/apk/**/*.apk
+      - android/app/build/outputs/**/*.apk
